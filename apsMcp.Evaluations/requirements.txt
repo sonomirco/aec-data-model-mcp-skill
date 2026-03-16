@@ -1,0 +1,4 @@
+openai
+python-dotenv
+poml==0.0.8
+rich

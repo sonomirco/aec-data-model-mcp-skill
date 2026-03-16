@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.4.1" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>5f8d1a77-e4e2-4bd5-bdfc-a13c9574db17</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.4.1" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="9.4.1" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.McpInspector" Version="9.7.0" />
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\apsMcp.SseServer\apsMcp.SseServer.csproj" />
+    <ProjectReference Include="..\apsMcp.StdioServer\apsMcp.StdioServer.csproj" />
+  </ItemGroup>
+
+</Project>

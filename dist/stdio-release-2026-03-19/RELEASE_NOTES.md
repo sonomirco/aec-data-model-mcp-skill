@@ -1,7 +1,7 @@
 # Release notes: stdio-v2026-03-19
 
 - Date: 2026-03-19
-- Commit: 54f987d
+- Source build commit: 54f987d
 - Component: apsMcp.StdioServer
 - Build config: Release, self-contained, single-file
 

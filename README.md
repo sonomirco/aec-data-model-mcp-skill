@@ -39,13 +39,6 @@ It helps assistants use the MCP server more reliably by defining:
 - RSQL construction guidance for element filtering (including Element Context and quoting rules)
 - required 3D viewer execution sequence (`aps-viewer-render` before `aps-highlight-elements`)
 
-## presentation package
-
-Presentation and research material is available under `docs/presentation`:
-
-- [docs/presentation/presentation-outline.md](docs/presentation/presentation-outline.md): main presentation storyline and narrative flow.
-- [docs/presentation/reference-library.md](docs/presentation/reference-library.md): single consolidated references and research file.
-
 ## Running the MCP server
 
 The server supports two connection modes:
@@ -185,6 +178,13 @@ env = { APS_CLIENT_ID = "your_client_id", APS_CLIENT_SECRET = "your_client_secre
 - CSnakes (.NET ↔ Python interop): https://tonybaloney.github.io/CSnakes/v1/
 - OpenAI Cookbook (prompting ideas): https://cookbook.openai.com/
 - Prompt evaluations example: https://github.com/anthropics/courses/blob/master/prompt_evaluations/01_intro_to_evals/01_intro_to_evals.ipynb
+
+## Presentation
+
+Presentation and research material is available under `docs/presentation`:
+
+- [docs/presentation/presentation-outline.md](docs/presentation/presentation-outline.md): main presentation storyline and narrative flow.
+- [docs/presentation/reference-library.md](docs/presentation/reference-library.md): single consolidated references and research file.
 
 ---
 

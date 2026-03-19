@@ -1,8 +1,7 @@
-﻿using ModelContextProtocol.Server;
+using ModelContextProtocol.Server;
 using System.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using apsMcp.Tools.Services;
-using ApsMcp.Tools.Services;
 using Newtonsoft.Json;
 
 namespace apsMcp.Tools;
@@ -75,3 +74,4 @@ public class GraphQlTools
             new string[] { filter, sourceFileId, exchangeName, targetFolderId });
     }
 }
+

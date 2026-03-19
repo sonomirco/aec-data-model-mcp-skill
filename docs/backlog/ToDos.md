@@ -1,6 +1,6 @@
 Here is a list of ToDos:
 
-- [] Fix MCP Inspector SSE connection issue (March 2, 2026): `Transport Type = SSE`, URL `https://localhost:5096/sse`, error `Connection Error - Did you add the proxy session token in Configuration?`
+- [x] Fix MCP inspector connection issue (completed March 18, 2026): use `Transport Type = streamable HTTP` with server URL `https://localhost:7270/` (or `http://localhost:5096/`). Legacy SSE endpoint `/sse` remains available for clients that require it.
 
 - [] Review the prompt.poml structure with this suggested structure https://github.com/anthropics/courses/blob/b4f26aedef55e06ad5eead5de83985249d1fab2f/prompt_engineering_interactive_tutorial/Anthropic%201P/09_Complex_Prompts_from_Scratch.ipynb
 

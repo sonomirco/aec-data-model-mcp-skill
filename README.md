@@ -39,11 +39,18 @@ It helps assistants use the MCP server more reliably by defining:
 - RSQL construction guidance for element filtering (including Element Context and quoting rules)
 - required 3D viewer execution sequence (`aps-viewer-render` before `aps-highlight-elements`)
 
+## presentation package
+
+Presentation and research material is available under `docs/presentation`:
+
+- [docs/presentation/presentation-outline.md](docs/presentation/presentation-outline.md): main presentation storyline and narrative flow.
+- [docs/presentation/reference-library.md](docs/presentation/reference-library.md): single consolidated references and research file.
+
 ## Running the MCP server
 
 The server supports two connection modes:
 
-- SSE over HTTP (`src/apsMcp.SseServer`)
+- HTTP server (`src/apsMcp.SseServer`) with streamable HTTP (preferred) and legacy SSE compatibility
 - stdio executable (`src/apsMcp.StdioServer`)
 
 Required environment variables for both modes:
@@ -52,7 +59,7 @@ Required environment variables for both modes:
 - `APS_CLIENT_SECRET`
 - `APS_CALLBACK_URL`
 
-### SSE mode (for remote/HTTP clients)
+### HTTP mode (for remote clients)
 
 Build and run the SSE server:
 
@@ -61,17 +68,26 @@ dotnet build src/apsMcp.sln
 dotnet run --project src/apsMcp.SseServer --launch-profile http
 ```
 
-Default SSE endpoint with `http` launch profile:
+Preferred streamable HTTP endpoint with `http` launch profile:
 
 ```text
-http://localhost:5096/sse
+http://localhost:5096/
 ```
 
 If you run with the `https` profile, use:
 
 ```text
+https://localhost:7270/
+```
+
+Legacy SSE endpoint (for clients that explicitly require SSE transport):
+
+```text
+http://localhost:5096/sse
 https://localhost:7270/sse
 ```
+
+The Aspire MCP inspector is configured for streamable HTTP and should target the root endpoint (`/`).
 
 ### stdio mode (for local executable clients)
 
@@ -91,7 +107,7 @@ Use those executable paths in your MCP client configuration.
 
 ## Client configuration examples
 
-### Claude Code with SSE (via mcp-remote)
+### Claude Code with SSE (legacy via mcp-remote)
 
 ```json
 {
@@ -131,7 +147,7 @@ Use those executable paths in your MCP client configuration.
 
 On macOS, set `command` to `/path/to/artifacts/stdio/osx-x64/apsMcp.StdioServer`.
 
-### Codex with SSE (via mcp-remote bridge)
+### Codex with SSE (legacy via mcp-remote bridge)
 
 ```bash
 codex mcp add aspire-server --env APS_CLIENT_ID=your_client_id --env APS_CLIENT_SECRET=your_client_secret --env APS_CALLBACK_URL=http://localhost:8080/api/auth/callback -- npx mcp-remote http://localhost:5096/sse

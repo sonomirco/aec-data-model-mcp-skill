@@ -6,6 +6,7 @@ This folder groups repository markdown docs that are not root entry-point files.
 
 - `backlog`: ongoing tasks and follow-ups (`ToDos.md`).
 - `plans`: implementation and design plans.
+- `presentation`: presentation package and supporting references.
 - `reviews`: dated review snapshots.
 - `reference`: technical references and query notes.
 

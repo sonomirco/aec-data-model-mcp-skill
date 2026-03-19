@@ -1,6 +1,6 @@
 using Autodesk.Authentication.Model;
 
-namespace ApsMcp.Tools.Models;
+namespace apsMcp.Tools.Models;
 
 /// <summary>
 /// Internal wrapper for caching token with its absolute expiration

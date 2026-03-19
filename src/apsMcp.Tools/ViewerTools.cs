@@ -1,11 +1,11 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
-using ApsMcp.Tools.Services;
+using apsMcp.Tools.Services;
 using Microsoft.Extensions.DependencyInjection;
 using ModelContextProtocol.Server;
 
-namespace ApsMcp.Tools;
+namespace apsMcp.Tools;
 
 [McpServerToolType]
 public class ViewerTool
@@ -130,3 +130,4 @@ public class ViewerTool
         </html>";
     }
 }
+

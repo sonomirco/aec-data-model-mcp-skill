@@ -1,4 +1,4 @@
-using ApsMcp.Tools.Services;
+using apsMcp.Tools.Services;
 using FluentAssertions;
 using Xunit;
 
@@ -56,3 +56,4 @@ public class AuthServiceTests
         verifier.Should().MatchRegex("^[A-Za-z0-9_-]+$");
     }
 }
+

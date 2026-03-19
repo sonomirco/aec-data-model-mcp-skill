@@ -1,84 +1,68 @@
-# Solution review - 2026-02-27
+# solution review - 2026-02-27 (updated 2026-03-18)
 
-## Scope and verification
+## current verification snapshot
 
-Review scope:
-- Architecture and startup wiring.
-- Authentication and viewer workflow services.
-- Core GraphQL template plumbing.
-- Documentation and contributor guidance.
-
-Validation commands run:
+Validation commands:
 - `dotnet build src/apsMcp.sln`
 - `dotnet test src/apsMcp.sln --no-build`
 
 Current status:
-- Build succeeded with 2 nullable warnings in `GraphQLTemplate.cs`.
-- Tests passed: 86/86.
+- Build succeeded with `0` warnings.
+- Tests passed: `93/93`.
 
-## Critical
+## status of original findings
+
+### resolved
 
 1. Replace non-cryptographic PKCE verifier generation in auth flow.
-Evidence: `src/apsMcp.Tools/Services/AuthService.cs:109` uses `new Random()` for PKCE verifier generation.
-Impact: PKCE verifier entropy source is predictable relative to cryptographic RNG expectations.
-Address: use `RandomNumberGenerator` and RFC 7636-compatible verifier generation.
+- Status: resolved.
+- Evidence: `AuthService.GenerateCodeVerifier` now uses `RandomNumberGenerator`.
 
 2. Harden callback URL handling before registering the HTTP listener prefix.
-Evidence: `src/apsMcp.Tools/Services/AuthService.cs:70` calls `listener.Prefixes.Add(_callbackUrl)` directly.
-Impact: callback URLs without required prefix formatting (for example missing trailing slash) can break login at runtime.
-Address: normalize and validate callback URL format before listener registration, and fail fast with a clear error.
+- Status: resolved.
+- Evidence: callback URL validation and listener-prefix normalization now run in `AuthService`.
 
 3. Add lifecycle control for viewer-side HTTP/WebSocket background loops.
-Evidence: `src/apsMcp.Tools/ViewerTools.cs:172` and `src/apsMcp.Tools/ViewerTools.cs:191` run infinite loops; listeners are created in `src/apsMcp.Tools/ViewerTools.cs:166` without disposal path.
-Impact: long-running process resource leakage risk and fragile behavior across repeated viewer sessions.
-Address: move listener/websocket lifecycle to a managed hosted service with cancellation tokens and proper disposal.
+- Status: resolved.
+- Evidence: `ViewerRuntimeService` is a managed hosted service with cancellation and disposal handling.
 
-## Good to have
+4. Re-enable service defaults or align docs with runtime behavior.
+- Status: resolved.
+- Evidence: `builder.AddServiceDefaults()` is active in `src/apsMcp.SseServer/Program.cs`.
 
-1. Re-enable service defaults or align docs with current runtime behavior.
-Evidence: `builder.AddServiceDefaults()` is commented at `src/apsMcp.SseServer/Program.cs:21`.
-Impact: health checks, standard resilience, and OpenTelemetry defaults documented for the stack are not applied in SSE server startup.
-Address: either enable defaults and endpoint mapping or explicitly document that they are intentionally disabled.
+5. Eliminate nullable warnings in GraphQL template parameter handling.
+- Status: resolved.
+- Evidence: build now runs warning-free.
 
-2. Eliminate nullable warnings in GraphQL template parameter handling.
-Evidence: warning-producing paths at `src/apsMcp.Tools/Models/GraphQLTemplate.cs:69` and `src/apsMcp.Tools/Models/GraphQLTemplate.cs:98`.
-Impact: nullable contract drift and potential runtime exceptions under template misconfiguration.
-Address: add null guards around semantic wrapper parameter names and avoid null-forgiving where not guaranteed.
+6. Narrow broad exception swallowing in authentication continuity logic.
+- Status: resolved.
+- Evidence: `EnsureAuthenticatedAsync` now catches specific exception types before a final unexpected-error branch.
 
-3. Narrow broad exception swallowing in authentication continuity logic.
-Evidence: `catch (Exception)` in `src/apsMcp.Tools/Services/AuthService.cs:208`.
-Impact: operational failures become hard to diagnose because unrelated errors trigger silent re-authentication fallback.
-Address: catch specific exception types and add structured logging for unexpected failures.
+7. Remove or justify legacy SignalR package dependency.
+- Status: resolved.
+- Evidence: no `Microsoft.AspNetCore.SignalR.Core` reference remains in `apsMcp.SseServer.csproj`.
 
-4. Remove or justify legacy SignalR package dependency.
-Evidence: `Microsoft.AspNetCore.SignalR.Core` is referenced at `src/apsMcp.SseServer/apsMcp.SseServer.csproj:12`, with no source usage in the server code.
-Impact: unnecessary dependency footprint and maintenance risk.
-Address: remove unused dependency or document the expected near-term usage.
+8. Expand tests beyond template mapping to cover service integration risks.
+- Status: partially resolved.
+- Evidence: dedicated tests now exist for auth callback/prefix logic and viewer runtime lifecycle.
 
-5. Expand tests beyond template mapping to cover service integration risks.
-Evidence: test project currently includes only `PaginationModelTests.cs`, `ParameterConsistencyTests.cs`, and `TemplateQueryGenerationTests.cs`.
-Impact: no regression coverage for auth listener behavior, token refresh, or viewer lifecycle orchestration.
-Address: add targeted integration/unit tests for auth callbacks, token refresh failures, and viewer loop lifecycle.
+9. Fix character encoding artifacts in prompt markdown export.
+- Status: resolved.
+- Evidence: prior mojibake markers are no longer present in `src/apsMcp.Tools/prompt.md`.
 
-## Nice to have
+10. Resolve naming and casing inconsistencies in source layout.
+- Status: resolved.
+- Evidence: namespace casing is normalized to `apsMcp.*` in source and tests.
 
-1. Fix character encoding artifacts in prompt markdown export.
-Evidence: `src/apsMcp.Tools/prompt.md:150` and `src/apsMcp.Tools/prompt.md:184` contain mojibake (`â†’`).
-Impact: degraded prompt readability and maintenance friction.
-Address: regenerate or normalize file encoding as UTF-8 consistently.
+11. Align contributor entry-point docs with current guidance files.
+- Status: resolved.
+- Evidence: `README.md` points contributors to `AGENTS.md`.
 
-2. Resolve naming and casing inconsistencies in source layout.
-Evidence: `src/apsMcp.Tools/graphQlTools.cs` file casing differs from class name `GraphQlTools`; mixed namespace casing appears in service imports.
-Impact: readability and portability friction, especially on case-sensitive environments.
-Address: standardize file names and namespace casing conventions.
+12. Add the referenced ExecPlan template source.
+- Status: resolved.
+- Evidence: `.agents/plans.md` exists and documents the expected template.
 
-3. Align contributor entry-point docs with current guidance files.
-Evidence: `README.md:46` points contributors to `CLAUDE.md`, which is not present as a separate file in this repository.
-Impact: onboarding confusion.
-Address: point README to `AGENTS.md` (or add a dedicated `CLAUDE.md` that mirrors current guidance).
+## remaining high-value improvements
 
-4. Add the referenced ExecPlan template source.
-Evidence: process guidance expects `.agents/plans.md`, but that path is currently missing.
-Impact: process guidance cannot be followed literally.
-Address: add `.agents/plans.md` or update guidance to a valid existing path.
-
+1. Expand auth tests to cover token exchange and refresh failure paths with HTTP stubbing.
+2. Keep transport documentation explicit about streamable HTTP (`/`) vs legacy SSE (`/sse`) usage by client type.

@@ -2,9 +2,8 @@ using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using apsMcp.Tools;
 using Serilog;
-using ApsMcp.Tools.Services;
-using DotNetEnv;
 using apsMcp.Tools.Services;
+using DotNetEnv;
 
 Log.Logger = new LoggerConfiguration()
            .MinimumLevel.Verbose()
@@ -134,6 +133,30 @@ var app = builder.Build();
 // Configure the app to listen on port 5096
 // app.Urls.Add("http://localhost:5096");
 
+app.Use(async (context, next) =>
+{
+    var isRootGet = HttpMethods.IsGet(context.Request.Method) && context.Request.Path == "/";
+    var hasSessionHeader = !string.IsNullOrWhiteSpace(context.Request.Headers["Mcp-Session-Id"]);
+
+    if (isRootGet && !hasSessionHeader)
+    {
+        context.Response.StatusCode = StatusCodes.Status200OK;
+        context.Response.ContentType = "application/json";
+
+        await context.Response.WriteAsJsonAsync(new
+        {
+            name = "apsMcp sse server",
+            message = "This endpoint uses MCP streamable HTTP. Start a session with POST / and include Accept: application/json, text/event-stream.",
+            inspector = "Use the Aspire MCP inspector to connect and browse tools/resources."
+        });
+
+        return;
+    }
+
+    await next();
+});
+
 app.MapMcp();
 app.MapDefaultEndpoints();
 app.Run();
+

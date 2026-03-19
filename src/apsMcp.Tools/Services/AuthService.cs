@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ApsMcp.Tools.Services;
+namespace apsMcp.Tools.Services;
 
 /// <summary>
 /// Handles the authentication process using a three-legged PKCE flow.
@@ -324,3 +324,4 @@ public class AuthService
         tokenStorage.StoreToken(newToken);
     }
 }
+

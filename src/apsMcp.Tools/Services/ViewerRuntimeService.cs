@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace ApsMcp.Tools.Services;
+namespace apsMcp.Tools.Services;
 
 /// <summary>
 /// Manages viewer-side HTTP and WebSocket listeners with explicit lifecycle control.
@@ -333,3 +333,4 @@ public sealed class ViewerRuntimeService(ILogger<ViewerRuntimeService> logger) :
         return port;
     }
 }
+

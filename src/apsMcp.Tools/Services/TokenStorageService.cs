@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Autodesk.Authentication.Model;
-using ApsMcp.Tools.Models;
+using apsMcp.Tools.Models;
 
-namespace ApsMcp.Tools.Services;
+namespace apsMcp.Tools.Services;
 
 public class TokenStorageService(IMemoryCache cache, AuthService authenticator, IServiceProvider serviceProvider)
 {
@@ -54,3 +54,4 @@ public class TokenStorageService(IMemoryCache cache, AuthService authenticator, 
         _cache.Remove(TokenKey);
     }
 }
+

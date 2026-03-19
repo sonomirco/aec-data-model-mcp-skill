@@ -1,0 +1,4 @@
+9205a5b96e5a02f7ad8e05ea3b4b87fd353819bd3114dd00695ecb83ae6eeba2  win-x64/apsMcp.StdioServer.exe
+6e0bf434a5620980d50a609ae8283995ae9a3e78e40d8f85ed7c090b269f9139  osx-x64/apsMcp.StdioServer
+2110dda5d48820251fd9e62ead825d697b4d63e89165a13ea2fa2d44d09924d5  apsMcp.StdioServer-win-x64.zip
+efb9e2a91061c879f3d6bfd5fbde12a0d526e79d552d0b3d986d69e68359c7a8  apsMcp.StdioServer-osx-x64.zip
